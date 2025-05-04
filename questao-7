@@ -1,0 +1,149 @@
+Questão 7
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Tarefas - Drag & Drop</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      padding-top: 40px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    form input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    form button {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .lista-tarefas {
+      list-style: none;
+      padding: 0;
+    }
+
+    .lista-tarefas li {
+      background: #f0f0f0;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      cursor: grab;
+      user-select: none;
+      transition: background 0.3s;
+    }
+
+    .lista-tarefas li.dragging {
+      opacity: 0.5;
+      background: #d0f0d0;
+    }
+
+    .lista-tarefas li.over {
+      border: 2px dashed #28a745;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Minha Lista de Tarefas</h2>
+    
+    <form id="form-tarefa">
+      <input type="text" id="nova-tarefa" placeholder="Nova tarefa..." required>
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <ul id="lista" class="lista-tarefas">
+      <!-- Tarefas vão aparecer aqui -->
+    </ul>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-tarefa');
+    const input = document.getElementById('nova-tarefa');
+    const lista = document.getElementById('lista');
+    let draggedItem = null;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const texto = input.value.trim();
+      if (texto !== '') {
+        adicionarTarefa(texto);
+        input.value = '';
+      }
+    });
+
+    function adicionarTarefa(texto) {
+      const li = document.createElement('li');
+      li.textContent = texto;
+      li.setAttribute('draggable', 'true');
+
+      li.addEventListener('dragstart', function() {
+        draggedItem = li;
+        li.classList.add('dragging');
+      });
+
+      li.addEventListener('dragend', function() {
+        draggedItem = null;
+        li.classList.remove('dragging');
+        document.querySelectorAll('.lista-tarefas li').forEach(el => el.classList.remove('over'));
+      });
+
+      li.addEventListener('dragover', function(e) {
+        e.preventDefault();
+      });
+
+      li.addEventListener('dragenter', function() {
+        if (li !== draggedItem) {
+          li.classList.add('over');
+        }
+      });
+
+      li.addEventListener('dragleave', function() {
+        li.classList.remove('over');
+      });
+
+      li.addEventListener('drop', function() {
+        if (li !== draggedItem) {
+          lista.insertBefore(draggedItem, li);
+        }
+      });
+
+      lista.appendChild(li);
+    }
+  </script>
+
+</body>
+</html>
