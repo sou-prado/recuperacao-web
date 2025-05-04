@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Scroll Suave</title>
+  <style>
+    * {
+      scroll-behavior: smooth; /* rolagem suave padrão */
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #333;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    header a:hover {
+      color: #ffcc00;
+    }
+
+    main {
+      padding-top: 80px; /* espaço para o header fixo */
+    }
+
+    section {
+      height: 100vh;
+      padding: 40px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    section:nth-child(even) {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="#secao1" class="link-scroll">Seção 1</a>
+      <a href="#secao2" class="link-scroll">Seção 2</a>
+      <a href="#secao3" class="link-scroll">Seção 3</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="secao1">
+      <h2>Seção 1</h2>
+      <p>Conteúdo da Seção 1...</p>
+    </section>
+
+    <section id="secao2">
+      <h2>Seção 2</h2>
+      <p>Conteúdo da Seção 2...</p>
+    </section>
+
+    <section id="secao3">
+      <h2>Seção 3</h2>
+      <p>Conteúdo da Seção 3...</p>
+    </section>
+  </main>
+
+  <script>
+    // Pega todos os links com a classe .link-scroll
+    let links = document.querySelectorAll('.link-scroll');
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault(); // evita o comportamento padrão do link
+        let destino = document.querySelector(this.getAttribute('href'));
+
+        if (destino) {
+          destino.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
