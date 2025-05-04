@@ -2,10 +2,112 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Questão 8</title>
+  <title>Interface de Abas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tabs-container {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #eee;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      background: #f1f1f1;
+      border: none;
+      outline: none;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+
+    .tab:hover {
+      background: #e1e1e1;
+    }
+
+    .tab.ativo {
+      background: #ffffff;
+      border-bottom: 2px solid #007bff;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .conteudos {
+      padding: 20px;
+    }
+
+    .conteudo {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .conteudo.ativo {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-  <!-- Conteúdo a ser adicionado mais tarde -->
+
+  <div class="tabs-container">
+    <div class="tabs">
+      <button class="tab ativo" data-tab="1">Aba 1</button>
+      <button class="tab" data-tab="2">Aba 2</button>
+      <button class="tab" data-tab="3">Aba 3</button>
+    </div>
+
+    <div class="conteudos">
+      <div class="conteudo ativo" data-tab="1">
+        <h3>Conteúdo da Aba 1</h3>
+        <p>Bem-vindo à primeira aba.</p>
+      </div>
+      <div class="conteudo" data-tab="2">
+        <h3>Conteúdo da Aba 2</h3>
+        <p>Esta é a segunda aba com mais informações.</p>
+      </div>
+      <div class="conteudo" data-tab="3">
+        <h3>Conteúdo da Aba 3</h3>
+        <p>Você está vendo a terceira aba agora.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const conteudos = document.querySelectorAll('.conteudo');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const alvo = tab.dataset.tab;
+
+        tabs.forEach(t => t.classList.remove('ativo'));
+        conteudos.forEach(c => c.classList.remove('ativo'));
+
+        tab.classList.add('ativo');
+        document.querySelector(`.conteudo[data-tab="${alvo}"]`).classList.add('ativo');
+      });
+    });
+  </script>
+
 </body>
 </html>
