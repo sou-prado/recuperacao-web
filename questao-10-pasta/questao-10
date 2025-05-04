@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Grafico Interativo</title>
+    <style>
+        body{
+            background:#f2f2f2;
+            font-family:Arial;
+            padding: 40px;
+            display:flex;
+            justify-content:center;
+        }
+
+        .container{
+            background:white;
+            padding:25px;
+            border-radius: 8px;
+            width:600px;
+            box-shadow:0px 0px 5px rgba(0,0,0,0.2)
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:20px
+        }
+
+        form{
+            display:flex;
+            gap: 10px;
+            margin-bottom:25px;
+            flex-wrap:wrap;
+        }
+
+        form input{
+            padding:10px;
+            flex:1;
+            border:1px solid #ccc;
+            border-radius:4px
+        }
+
+        form button{
+            background:#007bff;
+            color:#fff;
+            padding:10px 20px;
+            border:none;
+            border-radius:4px;
+            cursor:pointer
+        }
+
+        form button:hover{
+            background:#0056b3
+        }
+
+        .grafico{
+            display:flex;
+            align-items:flex-end;
+            gap:10px;
+            height:200px;
+            border-left:2px solid #333;
+            border-bottom:2px solid #333;
+            padding:10px;
+            overflow-x:auto;
+        }
+
+        .barra{
+            width:40px;
+            background:#28a745;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:flex-end;
+            color:white;
+            transition:height 0.3s ease
+        }
+
+        .barra div{
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.9em;
+        }
+
+        .barra span{
+            margin-top:5px;
+            font-size:0.8em
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Grafico de Barras Interativo</h2>
+
+        <form id="form-dados">
+            <input type="text" id="label" placeholder="Rotulo" required>
+            <input type="number" id="valor" placeholder="Valor" required>
+            <button type="submit">Adicionar</button>
+        </form>
+
+        <div id="grafico" class="grafico">
+            <!-- Barras aparecem aqui -->
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("form-dados");
+        const grafico = document.getElementById("grafico");
+
+        form.addEventListener("submit", function(e){
+            e.preventDefault();
+
+            let label = document.getElementById("label").value;
+            let valor = parseInt(document.getElementById("valor").value);
+
+            if(label === "" || isNaN(valor)){
+                return;
+            }
+
+            criarBarra(label, valor);
+            form.reset();
+        });
+
+        function criarBarra(rotulo, numero){
+            let barra = document.createElement("div");
+            barra.classList.add("barra");
+            barra.style.height = numero + "px";
+            barra.innerHTML = "<div>" + numero + "</div><span>" + rotulo + "</span>";
+            grafico.appendChild(barra);
+        }
+    </script>
+
+</body>
+</html>
