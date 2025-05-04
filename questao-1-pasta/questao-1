@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Registro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      padding-top: 50px;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    input.valido {
+      border-color: green;
+    }
+
+    input.invalido {
+      border-color: red;
+    }
+
+    .erro {
+      color: red;
+      font-size: 0.9em;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    #barraForca {
+      height: 8px;
+      background: #ccc;
+      border-radius: 4px;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      transition: background 0.3s, width 0.3s;
+    }
+
+    #barraForca.fraca {
+      background: red;
+      width: 33%;
+    }
+
+    #barraForca.media {
+      background: orange;
+      width: 66%;
+    }
+
+    #barraForca.forte {
+      background: green;
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <form id="registroForm">
+    <h2>Registro</h2>
+
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+    <span class="erro" id="erroNome"></span>
+
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
+    <span class="erro" id="erroEmail"></span>
+
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" name="senha" required>
+    <span class="erro" id="erroSenha"></span>
+
+    <label for="confirmarSenha">Confirmar Senha:</label>
+    <input type="password" id="confirmarSenha" name="confirmarSenha" required>
+    <span class="erro" id="erroConfirmarSenha"></span>
+
+    <div id="barraForca"></div>
+
+    <button type="submit">Registrar</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("registroForm");
+
+    const nome = document.getElementById("nome");
+    const email = document.getElementById("email");
+    const senha = document.getElementById("senha");
+    const confirmarSenha = document.getElementById("confirmarSenha");
+
+    const erroNome = document.getElementById("erroNome");
+    const erroEmail = document.getElementById("erroEmail");
+    const erroSenha = document.getElementById("erroSenha");
+    const erroConfirmarSenha = document.getElementById("erroConfirmarSenha");
+
+    const barraForca = document.getElementById("barraForca");
+
+    function validarNome() {
+      let valor = nome.value.trim();
+      if (valor.length < 3) {
+        erroNome.textContent = "Nome deve ter pelo menos 3 caracteres";
+        nome.classList.add("invalido");
+        nome.classList.remove("valido");
+        return false;
+      } else {
+        erroNome.textContent = "";
+        nome.classList.remove("invalido");
+        nome.classList.add("valido");
+        return true;
+      }
+    }
+
+    function validarEmail() {
+      let valor = email.value.trim();
+      let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!regex.test(valor)) {
+        erroEmail.textContent = "Formato de e-mail invalido";
+        email.classList.add("invalido");
+        email.classList.remove("valido");
+        return false;
+      } else {
+        erroEmail.textContent = "";
+        email.classList.remove("invalido");
+        email.classList.add("valido");
+        return true;
+      }
+    }
+
+    function validarSenha() {
+      const valor = senha.value;
+      const forte = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;
+      if (!forte.test(valor)) {
+        erroSenha.textContent = "Senha fraca, use letras e números (8+)";
+        senha.classList.add("invalido");
+        senha.classList.remove("valido");
+        return false;
+      } else {
+        erroSenha.textContent = "";
+        senha.classList.remove("invalido");
+        senha.classList.add("valido");
+        return true;
+      }
+    }
+
+    function validarConfirmarSenha() {
+      if (confirmarSenha.value !== senha.value) {
+        erroConfirmarSenha.textContent = "As senhas estão diferentes.";
+        confirmarSenha.classList.add("invalido");
+        confirmarSenha.classList.remove("valido");
+        return false;
+      } else {
+        erroConfirmarSenha.textContent = "";
+        confirmarSenha.classList.remove("invalido");
+        confirmarSenha.classList.add("valido");
+        return true;
+      }
+    }
+
+    function atualizarBarraForca() {
+      const valor = senha.value;
+      let forca = 0;
+
+      if (valor.length >= 8) forca++;
+      if (/[A-Z]/.test(valor)) forca++;
+      if (/[0-9]/.test(valor)) forca++;
+      if (/@|#|!|\$|%/.test(valor)) forca++; // faltou cobertura de todos caracteres especiais
+
+      barraForca.className = ""; // limpar antes
+
+      if (forca <= 1) {
+        barraForca.classList.add("fraca");
+      } else if (forca === 2 || forca === 3) {
+        barraForca.classList.add("media");
+      } else {
+        barraForca.classList.add("forte");
+      }
+    }
+
+    nome.addEventListener("input", validarNome);
+    email.addEventListener("input", validarEmail);
+    senha.addEventListener("input", () => {
+      validarSenha();
+      atualizarBarraForca();
+    });
+    confirmarSenha.addEventListener("input", validarConfirmarSenha);
+
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nomeOk = validarNome();
+      const emailEstaValido = validarEmail();
+      const senhaEstaBoa = validarSenha();
+      const confirmarOK = validarConfirmarSenha();
+
+      if (nomeOk && emailEstaValido && senhaEstaBoa && confirmarOK) {
+        alert("Cadastro feito com sucesso!!");
+        form.reset();
+        [nome, email, senha, confirmarSenha].forEach(c => c.classList.remove("valido"));
+        barraForca.className = "";
+      }
+    });
+  </script>
+</body>
+</html>
