@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrossel de Imagens</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .slider {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      display: none;
+      object-fit: cover;
+    }
+
+    .slide.ativo {
+      display: block;
+    }
+
+    .nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2em;
+      background-color: rgba(0,0,0,0.5);
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
+      z-index: 1;
+      border-radius: 50%;
+    }
+
+    .nav.anterior {
+      left: 10px;
+    }
+
+    .nav.proximo {
+      right: 10px;
+    }
+
+    .nav:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slider" id="slider">
+    <div class="slides">
+      <img src="https://picsum.photos/id/1015/800/400" alt="Imagem 1" class="slide ativo">
+      <img src="https://picsum.photos/id/1016/800/400" alt="Imagem 2" class="slide">
+      <img src="https://picsum.photos/id/1018/800/400" alt="Imagem 3" class="slide">
+    </div>
+    <button class="nav anterior" id="anterior">&#10094;</button>
+    <button class="nav proximo" id="proximo">&#10095;</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    const anterior = document.getElementById("anterior");
+    const proximo = document.getElementById("proximo");
+
+    let atual = 0;
+    let tempo = setInterval(mudarSlide, 5000); // muda a cada 5 seg
+
+    function mostrarSlide(i) {
+      slides.forEach((s, idx) => {
+        s.classList.remove("ativo");
+        if (idx == i) {
+          s.classList.add("ativo");
+        }
+      });
+    }
+
+    function mudarSlide() {
+      atual = (atual + 1) % slides.length;
+      mostrarSlide(atual);
+    }
+
+    function voltarSlide() {
+      atual = (atual - 1 + slides.length) % slides.length;
+      mostrarSlide(atual);
+    }
+
+    proximo.addEventListener("click", () => {
+      mudarSlide();
+      reiniciarTempo();
+    });
+
+    anterior.addEventListener("click", function() {
+      voltarSlide();
+      reiniciarTempo();
+    });
+
+    function reiniciarTempo() {
+      clearInterval(tempo);
+      tempo = setInterval(mudarSlide, 5000);
+    }
+  </script>
+</body>
+</html>
